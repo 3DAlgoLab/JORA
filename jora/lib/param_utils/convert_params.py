@@ -8,20 +8,48 @@ from jora.lib.array_utils import pt2jax
 from jora.lib.model import Attention, DecoderBlock, Llama, LlamaModel, ModelConfig
 from jora.lib.tree_utils import stack_leaves
 
+
 def convert_proj(x: tnn.Linear) -> Array:
     return pt2jax(x.weight.T)
 
+
 def convert_q_proj(x: tnn.Linear, *, model_config: ModelConfig) -> Array:
-    return pt2jax(x.weight.T.reshape(model_config.d_model, model_config.n_rep_kv, model_config.n_heads_kv, model_config.d_k))
+    return pt2jax(
+        x.weight.T.reshape(
+            model_config.d_model,
+            model_config.n_rep_kv,
+            model_config.n_heads_kv,
+            model_config.d_k,
+        )
+    )
+
 
 def convert_k_proj(x: tnn.Linear, *, model_config: ModelConfig) -> Array:
-    return pt2jax(x.weight.T.reshape(model_config.d_model, model_config.n_heads_kv, model_config.d_k))
+    return pt2jax(
+        x.weight.T.reshape(
+            model_config.d_model, model_config.n_heads_kv, model_config.d_k
+        )
+    )
+
 
 def convert_v_proj(x: tnn.Linear, *, model_config: ModelConfig) -> Array:
-    return pt2jax(x.weight.T.reshape(model_config.d_model, model_config.n_heads_kv, model_config.d_v))
+    return pt2jax(
+        x.weight.T.reshape(
+            model_config.d_model, model_config.n_heads_kv, model_config.d_v
+        )
+    )
+
 
 def convert_out_proj(x: tnn.Linear, *, model_config: ModelConfig) -> Array:
-    return pt2jax(x.weight.T.reshape(model_config.n_rep_kv, model_config.n_heads_kv, model_config.d_v, model_config.d_model))
+    return pt2jax(
+        x.weight.T.reshape(
+            model_config.n_rep_kv,
+            model_config.n_heads_kv,
+            model_config.d_v,
+            model_config.d_model,
+        )
+    )
+
 
 def convert_attention(x: LlamaAttention, *, model_config: ModelConfig) -> Attention:
     q_proj = convert_q_proj(x.q_proj, model_config=model_config)
@@ -30,20 +58,39 @@ def convert_attention(x: LlamaAttention, *, model_config: ModelConfig) -> Attent
     out_proj = convert_out_proj(x.o_proj, model_config=model_config)
     return Attention(q_proj=q_proj, k_proj=k_proj, v_proj=v_proj, out_proj=out_proj)
 
-def convert_decoder_block(x: LlamaDecoderLayer, *, model_config: ModelConfig) -> DecoderBlock:
+
+def convert_decoder_block(
+    x: LlamaDecoderLayer, *, model_config: ModelConfig
+) -> DecoderBlock:
     input_norm = pt2jax(x.input_layernorm.weight)
     attention = convert_attention(x.self_attn, model_config=model_config)
     post_attn_norm = pt2jax(x.post_attention_layernorm.weight)
     gate_proj = convert_proj(x.mlp.gate_proj)
     up_proj = convert_proj(x.mlp.up_proj)
     down_proj = convert_proj(x.mlp.down_proj)
-    return DecoderBlock(input_norm=input_norm, attention=attention, post_attn_norm=post_attn_norm, gate_proj=gate_proj, up_proj=up_proj, down_proj=down_proj)
+    return DecoderBlock(
+        input_norm=input_norm,
+        attention=attention,
+        post_attn_norm=post_attn_norm,
+        gate_proj=gate_proj,
+        up_proj=up_proj,
+        down_proj=down_proj,
+    )
 
-def convert_llama_model(model: LlamaModelPt, *, model_config: ModelConfig) -> LlamaModel:
+
+def convert_llama_model(
+    model: LlamaModelPt, *, model_config: ModelConfig
+) -> LlamaModel:
     embedding = pt2jax(model.embed_tokens.weight)
-    decoder = stack_leaves([convert_decoder_block(model.layers[i], model_config=model_config) for i in range(model_config.n_layers)])
+    decoder = stack_leaves(
+        [
+            convert_decoder_block(model.layers[i], model_config=model_config)
+            for i in range(model_config.n_layers)
+        ]
+    )
     norm = pt2jax(model.norm.weight)
     return LlamaModel(embedding=embedding, decoder=decoder, norm=norm)
+
 
 def convert_llama(model_pt: LlamaForCausalLM, *, model_config: ModelConfig) -> Llama:
     with torch.no_grad():

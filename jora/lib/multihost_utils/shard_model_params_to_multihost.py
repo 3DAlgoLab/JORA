@@ -18,5 +18,6 @@ sharding_mp = Llama(
     lm_head=...,
 )
 
+
 def shard_model_params_to_multihost(params: Llama) -> Llama:
     return tree_apply(shard_array_to_multihost, params, sharding_mp)

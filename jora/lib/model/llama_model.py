@@ -10,10 +10,12 @@ from .decoder import Decoder, check_decoder, decoder, init_decoder, decoder_lora
 from .embedding import check_embedding, embedding, init_embedding
 from .rms_norm import check_rms_norm, init_rms_norm, rms_norm
 
+
 class LlamaModel(NamedTuple):
     embedding: Any  # Array
     decoder: Decoder
     norm: Any  # Array
+
 
 # class LlamaLoraModel(NamedTuple):
 #     embedding: Any
@@ -32,6 +34,7 @@ def check_llama_model(params: LlamaModel, *, model_config: ModelConfig) -> None:
     check_decoder(params.decoder, model_config=model_config)
     check_rms_norm(params.norm, model_config=model_config)
 
+
 def init_llama_model(*, key: Array, model_config: ModelConfig) -> LlamaModel:
     key0, key1 = rand.split(key)
     embedding = init_embedding(key=key0, model_config=model_config)
@@ -39,8 +42,16 @@ def init_llama_model(*, key: Array, model_config: ModelConfig) -> LlamaModel:
     norm = init_rms_norm(model_config=model_config)
     return LlamaModel(embedding, decoder, norm)
 
-@partial(jax.jit, static_argnames=('model_config'))
-def llama_model(params: LlamaModel, seq: Array, attn_mask: Array, *, key: Array, model_config: ModelConfig) -> Array:
+
+@partial(jax.jit, static_argnames=("model_config"))
+def llama_model(
+    params: LlamaModel,
+    seq: Array,
+    attn_mask: Array,
+    *,
+    key: Array,
+    model_config: ModelConfig
+) -> Array:
     assert isinstance(seq, Array)
     assert isinstance(attn_mask, Array)
     assert seq.dtype == jnp.uint16
@@ -49,7 +60,7 @@ def llama_model(params: LlamaModel, seq: Array, attn_mask: Array, *, key: Array,
     assert model_config.d_k % 2 == 0
     assert key is None or model_config.dropout_rate is not None
 
-    attn_mask = jnp.tril(jnp.einsum('bi,bj->bij', attn_mask, attn_mask))[:, None, None]
+    attn_mask = jnp.tril(jnp.einsum("bi,bj->bij", attn_mask, attn_mask))[:, None, None]
 
     seq = embedding(params.embedding, seq)
     seq = decoder(params.decoder, seq, attn_mask, key=key, model_config=model_config)
@@ -57,8 +68,17 @@ def llama_model(params: LlamaModel, seq: Array, attn_mask: Array, *, key: Array,
     return seq
 
 
-@partial(jax.jit, static_argnames=('lora_config', 'model_config'))
-def llama_model_lora(lora_params, lora_config, params: LlamaModel, seq: Array, attn_mask: Array, *, key: Array, model_config: ModelConfig) -> Array:
+@partial(jax.jit, static_argnames=("lora_config", "model_config"))
+def llama_model_lora(
+    lora_params,
+    lora_config,
+    params: LlamaModel,
+    seq: Array,
+    attn_mask: Array,
+    *,
+    key: Array,
+    model_config: ModelConfig
+) -> Array:
     assert isinstance(seq, Array)
     assert isinstance(attn_mask, Array)
     assert seq.dtype == jnp.uint16
@@ -67,9 +87,17 @@ def llama_model_lora(lora_params, lora_config, params: LlamaModel, seq: Array, a
     assert model_config.d_k % 2 == 0
     assert key is None or model_config.dropout_rate is not None
 
-    attn_mask = jnp.tril(jnp.einsum('bi,bj->bij', attn_mask, attn_mask))[:, None, None]
+    attn_mask = jnp.tril(jnp.einsum("bi,bj->bij", attn_mask, attn_mask))[:, None, None]
 
     seq = embedding(params.embedding, seq)
-    seq = decoder_lora(lora_params, lora_config, params.decoder, seq, attn_mask, key=key, model_config=model_config)
+    seq = decoder_lora(
+        lora_params,
+        lora_config,
+        params.decoder,
+        seq,
+        attn_mask,
+        key=key,
+        model_config=model_config,
+    )
     seq = rms_norm(params.norm, seq, model_config=model_config)
     return seq

@@ -21,38 +21,53 @@ def select_file():
 
 
 def dummy_train(model_size, hf_path, jax_path, dataset_path, checkpoint_path):
-    config = ParallamaConfig(MODEL_SIZE=model_size, JAX_PARAMS_PATH=jax_path,
-                             LLAMA2_META_PATH=hf_path)
-    dataset = generate_alpaca_dataset(dataset_path, 'train', config)
+    config = ParallamaConfig(
+        MODEL_SIZE=model_size, JAX_PARAMS_PATH=jax_path, LLAMA2_META_PATH=hf_path
+    )
+    dataset = generate_alpaca_dataset(dataset_path, "train", config)
     train_lora(config, dataset, checkpoint_path)
-    return 'done'
+    return "done"
 
 
 with gr.Blocks(analytics_enabled=False) as ui_component:
     with gr.Row():
-        txt_model_size = gr.components.Dropdown(["7B", "13B", "70B"], label="Model Size")
+        txt_model_size = gr.components.Dropdown(
+            ["7B", "13B", "70B"], label="Model Size"
+        )
     with gr.Row():
-        txt_hf = gr.components.Textbox("hf_models/path", label="Llama-2 pretrained path", lines=1)
-        btn_hf = gr.components.Button('Set Llama-2 path')
+        txt_hf = gr.components.Textbox(
+            "hf_models/path", label="Llama-2 pretrained path", lines=1
+        )
+        btn_hf = gr.components.Button("Set Llama-2 path")
         btn_hf.click(select_directory, outputs=txt_hf)
     with gr.Row():
-        txt_jax = gr.components.Textbox("jax_model.pkl", label="JAX model path", lines=1)
-        btn_jax = gr.components.Button('Set JAX model path')
+        txt_jax = gr.components.Textbox(
+            "jax_model.pkl", label="JAX model path", lines=1
+        )
+        btn_jax = gr.components.Button("Set JAX model path")
         btn_jax.click(select_file, outputs=txt_jax)
     with gr.Row():
-        txt_dataset = gr.components.Textbox("dataset.json", label="Dataset path (Alpaca format)", lines=1)
-        btn_dataset = gr.components.Button('Set dataset path')
+        txt_dataset = gr.components.Textbox(
+            "dataset.json", label="Dataset path (Alpaca format)", lines=1
+        )
+        btn_dataset = gr.components.Button("Set dataset path")
         btn_dataset.click(select_file, outputs=txt_dataset)
     with gr.Row():
-        txt_checkpoint = gr.components.Textbox("checkpoints", label="Checkpoints path", lines=1)
-        btn_checkpoint = gr.components.Button('Set checkpoints path')
+        txt_checkpoint = gr.components.Textbox(
+            "checkpoints", label="Checkpoints path", lines=1
+        )
+        btn_checkpoint = gr.components.Button("Set checkpoints path")
         btn_checkpoint.click(select_directory, outputs=txt_checkpoint)
     with gr.Row():
         # txt_done = gr.components.Text("", lines=1)
         lbl_train = gr.components.Label("Start Training -->", show_label=False)
         # txt_done = gr.components.Textbox("", lines=1, show_label=False)
-        btn_train = gr.components.Button('Train')
-        btn_train.click(dummy_train, inputs=[txt_model_size, txt_hf, txt_jax, txt_dataset, txt_checkpoint],outputs=lbl_train)
+        btn_train = gr.components.Button("Train")
+        btn_train.click(
+            dummy_train,
+            inputs=[txt_model_size, txt_hf, txt_jax, txt_dataset, txt_checkpoint],
+            outputs=lbl_train,
+        )
 
 
 if __name__ == "__main__":

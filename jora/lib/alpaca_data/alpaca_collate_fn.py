@@ -5,13 +5,19 @@ from transformers import LlamaTokenizer
 from jora.lib.gemma.gemma_utils import GemmaTokenizer
 from typing import NamedTuple, Union
 
+
 class TrainData(NamedTuple):
     seq: Array
     seq_mask: Array
     labels: Array
     labels_mask: Array
 
-def alpaca_collate_fn_train(tokenizer: Union[LlamaTokenizer, GemmaTokenizer], max_len: int, data_batch: list[tuple[str, str]]):
+
+def alpaca_collate_fn_train(
+    tokenizer: Union[LlamaTokenizer, GemmaTokenizer],
+    max_len: int,
+    data_batch: list[tuple[str, str]],
+):
     bos_id = tokenizer.bos_token_id
     eos_id = tokenizer.eos_token_id
 
@@ -26,22 +32,38 @@ def alpaca_collate_fn_train(tokenizer: Union[LlamaTokenizer, GemmaTokenizer], ma
     labels_mask_list = []
 
     for question, answer in data_batch:
-        question = tokenizer(question, add_special_tokens=False, return_attention_mask=False).input_ids
-        answer = tokenizer(answer, add_special_tokens=False, return_attention_mask=False).input_ids
+        question = tokenizer(
+            question, add_special_tokens=False, return_attention_mask=False
+        ).input_ids
+        answer = tokenizer(
+            answer, add_special_tokens=False, return_attention_mask=False
+        ).input_ids
 
         len_question = len(question)
         len_answer = len(answer)
         len_seq = len_question + len_answer + 2
         len_pad = max_len - len_seq
 
-        assert len(question) + 1 < max_len, '`max_len` too small'
+        assert len(question) + 1 < max_len, "`max_len` too small"
 
-        seq = list(chain((bos_id,), question, answer, (eos_id,), repeat(pad_id, len_pad)))
+        seq = list(
+            chain((bos_id,), question, answer, (eos_id,), repeat(pad_id, len_pad))
+        )
         # seq = [x if x!=450 else 1576 for x in seq] # remove unnecessary space when merging tokens
-        seq_mask = list(chain(repeat(True, 1 + len_question + len_answer + 1), repeat(False, len_pad)))
+        seq_mask = list(
+            chain(
+                repeat(True, 1 + len_question + len_answer + 1), repeat(False, len_pad)
+            )
+        )
 
         labels = list(chain(question, answer, (eos_id,), repeat(pad_id, len_pad + 1)))
-        labels_mask = list(chain(repeat(False, len_question), repeat(True, len_answer + 1), repeat(False, len_pad + 1)))
+        labels_mask = list(
+            chain(
+                repeat(False, len_question),
+                repeat(True, len_answer + 1),
+                repeat(False, len_pad + 1),
+            )
+        )
 
         seq = seq[:max_len]
         seq_mask = seq_mask[:max_len]
@@ -60,12 +82,16 @@ def alpaca_collate_fn_train(tokenizer: Union[LlamaTokenizer, GemmaTokenizer], ma
 
     return TrainData(seq_, seq_mask_, labels_, labels_mask_)
 
+
 class TestData(NamedTuple):
     seq: Array
     seq_mask: Array
     labels: list[str]
 
-def alpaca_collate_fn_test(tokenizer: LlamaTokenizer, max_len: int, data_batch: list[tuple[str, str]]):
+
+def alpaca_collate_fn_test(
+    tokenizer: LlamaTokenizer, max_len: int, data_batch: list[tuple[str, str]]
+):
     bos_id = tokenizer.bos_token_id
     eos_id = tokenizer.eos_token_id
 
@@ -74,13 +100,15 @@ def alpaca_collate_fn_test(tokenizer: LlamaTokenizer, max_len: int, data_batch: 
     labels_list = []
 
     for question, answer in data_batch:
-        question = tokenizer(question, add_special_tokens=False, return_attention_mask=False).input_ids
+        question = tokenizer(
+            question, add_special_tokens=False, return_attention_mask=False
+        ).input_ids
 
         len_question = len(question)
         len_seq = len_question + 1
         len_pad = max_len - len_seq
 
-        assert len(question) + 1 < max_len, '`max_len` too small'
+        assert len(question) + 1 < max_len, "`max_len` too small"
 
         seq = list(chain((bos_id,), question, repeat(eos_id, len_pad)))
         seq_mask = list(chain(repeat(True, 1 + len_question), repeat(False, len_pad)))
