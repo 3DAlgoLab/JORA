@@ -46,6 +46,10 @@ setup.py
 ./jora/lib/multihost_utils/__init__.py
 ./jora/lib/multihost_utils/shard_array_to_multihost.py
 ./jora/lib/multihost_utils/shard_model_params_to_multihost.py
+./jora/lib/paligemma/__init__.py
+./jora/lib/paligemma/common.py
+./jora/lib/paligemma/gemma_config.py
+./jora/lib/paligemma/gemma_utils.py
 ./jora/lib/param_utils/__init__.py
 ./jora/lib/param_utils/check_params_equal.py
 ./jora/lib/param_utils/convert_back_params.py

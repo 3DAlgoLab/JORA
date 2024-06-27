@@ -19,8 +19,8 @@ from jax.experimental import mesh_utils
 
 import math
 import optax
-import time
-from transformers import LlamaTokenizer
+
+
 from tqdm import tqdm
 from typing import Any, Callable, Optional, Dict
 
@@ -56,12 +56,13 @@ optimize: Optional[Callable]
 active_model_config: GemmaConfig
 
 model_config_mapping = {
-    "2b": GemmaConfig2B,
-    "2b-it": GemmaConfig2B,
-    "7b": GemmaConfig7B,
-    "7b-it": GemmaConfig7B,
-    "1.1-2b-it": GemmaConfig2B,
-    "1.1-7b-it": GemmaConfig7B,
+    "default": GemmaConfig2B
+    # "2b": GemmaConfig2B,
+    # "2b-it": GemmaConfig2B,
+    # "7b": GemmaConfig7B,
+    # "7b-it": GemmaConfig7B,
+    # "1.1-2b-it": GemmaConfig2B,
+    # "1.1-7b-it": GemmaConfig7B,
 }
 
 cpu_devices = jax.devices("cpu")
@@ -72,7 +73,7 @@ gpu_sharding_mp = PositionalSharding(gpu_devices)
 gpu_sharding_mp = gpu_sharding_mp.reshape((1, len(gpu_devices)))
 
 
-class ParagemmaConfig(NamedTuple):
+class ParaPaliGemmaConfig(NamedTuple):
     GEMMA_MODEL_PATH: str  # e.g. '/tmp/llama2-13B'
     MODEL_VERSION: str  # '2b', '7b', '2b-it', '7b-it'
     NUM_SHARDS: int
@@ -88,7 +89,7 @@ class ParagemmaConfig(NamedTuple):
     CACHE_SIZE: int  # Numbber of steps in the transformer's cache
 
 
-ParagemmaConfig.__new__.__defaults__ = (
+ParaPaliGemmaConfig.__new__.__defaults__ = (
     None,
     None,
     None,
@@ -137,7 +138,7 @@ def forward_and_loss_fn(
     # Foward pass on the input data.
     # No attention cache is needed here.
     logits, _ = model.apply(
-        {"params": params["transformer"]},
+        {"params": params["transformer"]}, # type: ignore
         input_tokens,
         positions,
         None,  # Attention cache is None.
@@ -320,7 +321,7 @@ def train_lora(
 
     key = rand.PRNGKey(config.SEED)
     vocab_path = os.path.join(config.GEMMA_MODEL_PATH, "tokenizer.model")
-    vocab = spm.SentencePieceProcessor()
+    vocab = spm.SentencePieceProcessor(vocab_path)
     vocab.Load(vocab_path)
     tokenizer = GemmaTokenizer(vocab)
 
