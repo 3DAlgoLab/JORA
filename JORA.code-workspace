@@ -1,16 +1,16 @@
 {
 	"folders": [
 		{
-			"path": "../../.."
+			"path": "."
 		},
 		{
-			"path": "../../../../big_vision"
+			"path": "../big_vision"
 		},
 		{
-			"path": "../../../../../llms/gemma"
+			"path": "../../llms/gemma"
 		},
 		{
-			"path": "../../../../../study/jax_n_flax"
+			"path": "../../study/jax_n_flax"
 		}
 	],
 	"settings": {
