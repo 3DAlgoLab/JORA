@@ -1,56 +1,54 @@
-from typing import NamedTuple
+import math
 import os
-from collections import defaultdict
 import sys
+import time
+from collections import defaultdict
 from os.path import join as pjoin
 from pathlib import Path
-import tree
 from pprint import pprint
+from typing import Any, Callable, Dict, NamedTuple, Optional
 
 import jax
-from jax import Array
-from jax.experimental.multihost_utils import process_allgather
 import jax.numpy as jnp
 import jax.random as rand
+import optax
+import tree
+from jax import Array
+from jax.experimental import mesh_utils
+from jax.experimental.multihost_utils import process_allgather
 
 # Define the mesh
-from jax.sharding import Mesh, NamedSharding, PartitionSpec as P
-from jax.experimental import mesh_utils
-
-import math
-import optax
-import time
-from transformers import LlamaTokenizer
+from jax.sharding import Mesh, NamedSharding
+from jax.sharding import PartitionSpec as P
 from tqdm import tqdm
-from typing import Any, Callable, Optional, Dict
+from transformers import LlamaTokenizer
 
-import sys
 import jora.lib
 
 sys.modules["lib"] = jora.lib
 
-from lib.dataloader import LlamaDataLoader
-from lib.alpaca_data import AlpacaDataset, TrainData, alpaca_collate_fn_train
-from lib.loss import cross_entropy_loss
-
-from lib.param_utils import load_params, save_params
-from jora.hf.hf_to_jax import hf_to_jax
+import pickle
+from collections import namedtuple
+from functools import partial
 from os.path import join as pjoin
 
-from jax.sharding import Mesh, NamedSharding, PartitionSpec, PositionalSharding
-from functools import partial
-from collections import namedtuple
-import pickle
-
-# gemma imports
-from .gemma_utils import GemmaTokenizer, get_attention_mask_and_positions
-from .gemma_config import GemmaConfig, GemmaConfig2B, GemmaConfig7B, GEMMA_VERSIONS
+import sentencepiece as spm
 from gemma import params as params_lib
 from gemma import sampler as sampler_lib
 from gemma import transformer as transformer_lib
-import sentencepiece as spm
-
+from jax.sharding import Mesh, NamedSharding, PartitionSpec, PositionalSharding
+from lib.alpaca_data import AlpacaDataset, TrainData, alpaca_collate_fn_train
+from lib.dataloader import LlamaDataLoader
+from lib.loss import cross_entropy_loss
+from lib.param_utils import load_params, save_params
 from rich.progress import Progress
+
+from jora.hf.hf_to_jax import hf_to_jax
+
+from .gemma_config import GEMMA_VERSIONS, GemmaConfig, GemmaConfig2B, GemmaConfig7B
+
+# gemma imports
+from .gemma_utils import GemmaTokenizer, get_attention_mask_and_positions
 
 optimize: Optional[Callable]
 active_model_config: GemmaConfig
@@ -85,7 +83,7 @@ class ParagemmaConfig(NamedTuple):
     MAX_SEQ_LEN: int
     N_EPOCHS: int
     SEED: int
-    CACHE_SIZE: int  # Numbber of steps in the transformer's cache
+    CACHE_SIZE: int  # Number of steps in the transformer's cache
 
 
 ParagemmaConfig.__new__.__defaults__ = (
@@ -166,7 +164,7 @@ def forward_and_loss_fn(
 
 def train_step_lora(
     model: transformer_lib.Transformer,
-    lora_params,
+    lora_params: jax.Array,
     params,
     opt_state: optax.OptState,
     total_loss: jax.Array,
@@ -174,7 +172,7 @@ def train_step_lora(
     target_mask: jax.Array,
     positions: jax.Array,
     attention_mask: jax.Array,
-) -> tuple[jax.Array, optax.OptState]:
+) -> tuple[jax.Array, optax.OptState, jax.Array, jax.Array]:
     """Train step.
 
     Args:
@@ -224,7 +222,7 @@ def validation_step(
         input_mask=example.target_mask,
         positions=positions,
         attention_mask=attention_mask,
-    )
+    )  # type: ignore
     return val_loss
 
 

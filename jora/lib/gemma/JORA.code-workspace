@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../../../big_vision"
+		},
+		{
+			"path": "../../../../../llms/gemma"
 		}
 	],
 	"settings": {
