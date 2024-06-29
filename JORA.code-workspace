@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "../../study/jax_n_flax"
+		},
+		{
+			"path": "../../TinyVLA/paligemma_based"
 		}
 	],
 	"settings": {
