@@ -1,0 +1,861 @@
+{
+  "transformer": {
+    "embedder": {
+      "input_embedding": [
+        256128,
+        2048
+      ]
+    },
+    "final_norm": {
+      "scale": [
+        2048
+      ]
+    },
+    "layer_0": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_1": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_10": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_11": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_12": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_13": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_14": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_15": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_16": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_17": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_2": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_3": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_4": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_5": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_6": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_7": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_8": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    },
+    "layer_9": {
+      "attn": {
+        "attn_vec_einsum": {
+          "w": [
+            8,
+            256,
+            2048
+          ]
+        },
+        "kv_einsum": {
+          "w": [
+            2,
+            1,
+            2048,
+            256
+          ]
+        },
+        "q_einsum": {
+          "w": [
+            8,
+            2048,
+            256
+          ]
+        }
+      },
+      "mlp": {
+        "gating_einsum": [
+          2,
+          2048,
+          16384
+        ],
+        "linear": [
+          16384,
+          2048
+        ]
+      },
+      "pre_attention_norm": {
+        "scale": [
+          2048
+        ]
+      },
+      "pre_ffw_norm": {
+        "scale": [
+          2048
+        ]
+      }
+    }
+  }
+}
