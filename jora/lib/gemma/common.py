@@ -202,7 +202,7 @@ def train_step_lora(
     total_loss += train_loss
     # Update the parameters
     updates, opt_state = optimize(grads, opt_state, lora_params)
-    lora_params = optax.apply_updates(lora_params, updates)
+    lora_params = optax.apply_updates(lora_params, updates) # type: ignore
     return lora_params, opt_state, total_loss, train_loss
 
 
